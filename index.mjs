@@ -1,6 +1,5 @@
-import { connect } from './client.mjs';
+import { start } from './engine.mjs';
 
-const PLAYER = 'PL2';
 const LEFT = 'LEFT';
 const RIGHT = 'RIGHT';
 const STRAIGHT = 'STRAIGHT';
@@ -48,25 +47,7 @@ const nextMove = (id, gameState) => {
 };
 
 const main = async () => {
-  console.log('Starting SnakeWars bot');
-  const {send, readLine} = await connect();
-  console.log('Connected to SnakeWars');
-  const hello = await readLine();
-  if (hello !== 'ID') {
-    console.log('Expected "ID" from server, got', hello);
-    process.exit(1);
-  }
-
-  await send(PLAYER);
-  const id = await readLine();
-
-  console.log('Got ID', id);
-  
-  while(true) {
-    const gameState = JSON.parse(await readLine());
-    const move = nextMove(id, gameState);
-    await send(move);
-  }
+  await start(nextMove);
 };
 
 await main();
