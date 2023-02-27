@@ -1,4 +1,5 @@
 import { connect } from './client.mjs';
+import { stopwatch } from './stopwatch.mjs';
 
 const PLAYER = 'PL2';
 const HOST = 'localhost';
@@ -20,8 +21,12 @@ export const start = async (nextMove) => {
   console.log('Got ID', id);
   
   while(true) {
+    const sw = stopwatch();
     const gameState = JSON.parse(await readLine());
+    console.log('Got game state in', sw.elapsed(), 'ms');
+    sw.reset();
     const move = nextMove(id, gameState);
     await send(move);
+    console.log('Sent move', move, 'in', sw.elapsed(), 'ms');
   }
 };
